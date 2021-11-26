@@ -17,6 +17,11 @@ dependencies:
   #Toast 사용을 위함
   fluttertoast: ^8.0.8
 
+  get: ^4.1.4     #GETX
+  cached_network_image: ^3.1.0
+  http: ^0.13.3   #Network
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
