@@ -1,115 +1,153 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'custom_dialog.dart';
+import 'mylistview_widget.dart';
+
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyList(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+/// 이렇게 하니 다이얼로그가 팝업이 안됨
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) => const MyList();
+// }
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class MyList extends StatefulWidget {
+  const MyList({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<StatefulWidget> createState() => _MyState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyState extends State<MyList> {
   int _counter = 0;
 
-  void _incrementCounter() {
+  final List<String> entries = [];
+
+  TextEditingController addItemController = TextEditingController();
+
+  final _bottomContainkey = GlobalKey();
+
+  ///사이즈 알아내기 위해 생성
+
+  late ScrollController _scrollController;
+
+  ///스크롤 컨트롤러
+
+  @override
+  void initState() {
+    _scrollController = ScrollController();
+
+    ///스크롤 컨트롤러 초기화
+  }
+
+  // 리스트에 항목 추가
+  void add() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
+      if (addItemController.text == "") {
+        CustomDialog.showOneButtonDialog(context, '목록 추가 실패',
+            '목록에 추가될 문자열이 입력되지 않았습니다.\n\n추가할 문자열을 입력해 주세요.', '확인');
+
+        return;
+      }
+
+      entries.add(addItemController.text); //텍스트필드에 입력된 문자 리스트에 추가
       _counter++;
+
+      addItemController.text = "";
+      //    _scrollController.jumpTo(_scrollController.position.minScrollExtent); //스크롤 최 상단으로 이동
+
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent +
+          _bottomContainkey.currentContext!.size!.height); //스크롤 최 하단으로 이동
+
+      _getSize(); //사이즈 조사 => 앱 구동과 상관 없음 지워도 됨
+
+      Fluttertoast.showToast(msg: "목록 추가 완료", toastLength: Toast.LENGTH_SHORT);
     });
   }
 
+  ///사이즈 조사 => 앱 구동과 상관 없음 지워도 됨
+  void _getSize() {
+    final _size = _bottomContainkey.currentContext!.size;
+    final _width = _size!.width;
+    final _height = _size.height;
+  }
+
   @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+  Widget build(BuildContext context) => MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            title: Center(child: Text("송도 Flutter 스터디 과제 No.1")),
+          ),
+          body: Column(
+            children: [
+              Expanded(child: MyListViewWidget(entries, _scrollController)),
+              _BottomContinerWidget(),
+            ],
+          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: add,
+          //   child: const Icon(Icons.add),
+          // ),
         ),
+      );
+
+  Widget _BottomContinerWidget() {
+    return Container(
+      key: _bottomContainkey,
+      padding:
+          const EdgeInsets.only(left: 10.0, top: 0.0, right: 0.0, bottom: 10.0),
+      alignment: Alignment(0.0, -1.0),
+      child: Column(
+        children: [
+          Container(
+            height: 1,
+            color: Colors.grey,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15.0, top: 0, right: 10.0, bottom: 15.0),
+                  child: TextField(
+                    controller: addItemController,
+                    decoration: new InputDecoration(
+                        hintText: '추가할 문자열을 입력하세요.',
+                        hintStyle: TextStyle(color: Colors.grey[300])),
+                  ),
+                ),
+              ),
+              FlatButton(
+                  onPressed: () {
+                    add(); //항목 추가
+                  },
+                  child: Text(
+                    "추가",
+                    style: TextStyle(color: Colors.lightBlue),
+                  ))
+            ],
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
