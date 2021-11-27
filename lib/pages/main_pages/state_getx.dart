@@ -16,6 +16,7 @@ class StateWithGetx extends StatelessWidget {
   final BaseAPICommunicator baseAPICommunicator = Get.find();
 
   search() {
+
     String inputText;
     if ((inputText = _textController.text) == '') return;
 

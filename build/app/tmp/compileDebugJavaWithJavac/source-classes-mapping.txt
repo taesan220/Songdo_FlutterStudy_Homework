@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/immai/flutter_songdo_homework2/BuildConfig.java
+ com.immai.flutter_songdo_homework2.BuildConfig

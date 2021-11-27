@@ -1,0 +1,4 @@
+#Sat Nov 27 16:03:18 KST 2021
+base.0=/Users/taron/Developer/Flutter_WorkPlace/Songdo_FlutterStudy_Homework/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

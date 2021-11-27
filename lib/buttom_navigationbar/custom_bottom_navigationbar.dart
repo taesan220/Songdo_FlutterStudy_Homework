@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_songdo_homework2/main.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
-  CustomBottomNavigationBar({Key? key}) : super(key: key);
+//  final VoidCallback onCountSelected; // Void 콜백메소드
+  final Function(int) onCountChange; //값을 리턴하는 콜백메소드
+
+  CustomBottomNavigationBar(this.onCountChange, {Key? key, required}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -11,6 +15,8 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class _CustomBottomNavigationBar extends State<CustomBottomNavigationBar> {
   int _selectedIndex = 0;
+
+  _CustomBottomNavigationBar();
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +31,9 @@ class _CustomBottomNavigationBar extends State<CustomBottomNavigationBar> {
       currentIndex: _selectedIndex, //현재 선택된 Index
       onTap: (int index) {
         setState(() {
+          //변경된 바 인덱스를 리턴하는 콜백 메소드 호출
+          widget.onCountChange(index);
+
           _selectedIndex = index;
         });
       },

@@ -12,6 +12,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import 'api_communication/base_api_communicator.dart';
+import 'buttom_navigationbar/custom_bottom_navigationbar.dart';
 
 void main() {
   runApp(GetMaterialApp(
@@ -32,16 +33,11 @@ void main() {
   ));
 }
 
-/*
-
-Get.toNamed('/papa/value?id=123&name=침착맨');
-Get.parameters['param']
-Get.parameters['id']
-Get.parameters['name']
-
- */
 class MyApp extends StatefulWidget {
+
+
   const MyApp({Key? key}) : super(key: key);
+
 
   @override
   _MyApp createState() => _MyApp();
@@ -59,42 +55,26 @@ class _MyApp extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    pageChange(int pageIndex) { //
+      setState(() {
+        _widgetOptions.elementAt(pageIndex);
+      });
+    }
+
+    //하단 탭바 생성
+    CustomBottomNavigationBar bottomBar = CustomBottomNavigationBar((bottomBarIndex)=> {
+      print('변경된 탭 = $bottomBarIndex'),
+
+      _selectedIndex = bottomBarIndex,
+      pageChange(_selectedIndex), //페이지 변경
+    });
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('플러터앱'),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.grey,
-        selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.white,
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        currentIndex: _selectedIndex, //현재 선택된 Index
-        onTap: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            label: '라우트',
-            icon: Icon(Icons.favorite),
-          ),
-          BottomNavigationBarItem(
-            label: '라우트 getx',
-            icon: Icon(Icons.music_note),
-          ),
-          BottomNavigationBarItem(
-            label: 'state',
-            icon: Icon(Icons.location_on),
-          ),
-          BottomNavigationBarItem(
-            label: 'state getx',
-            icon: Icon(Icons.library_books),
-          ),
-        ],
-      ),
+      bottomNavigationBar: bottomBar,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
