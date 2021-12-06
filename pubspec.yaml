@@ -14,12 +14,27 @@ dependencies:
 
   cupertino_icons: ^1.0.2
 
-  #Toast 사용을 위함
-  fluttertoast: ^8.0.8
+  # app
+  tmdb_api: ^2.0.0
 
-  get: ^4.1.4     #GETX
-  cached_network_image: ^3.1.0
-  http: ^0.13.3   #Network
+  # 기본
+  get:
+  get_it:
+  logger:
+  flutter_screenutil:
+  styled_widget: ^0.4.0+3
+  cached_network_image: ^3.1.0+1
+  flex_color_scheme: ^4.1.1
+  font_awesome_flutter:
+  community_material_icon: ^5.4.55
+
+  ## icon 종류
+  flutter_font_icons:
+  material_design_icons_flutter:
+  fluttericon:
+  line_awesome_flutter:
+  eva_icons_flutter:
+  icofont_flutter:
 
 
 dev_dependencies:
@@ -31,3 +46,9 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - assets/images/plus_button.png
+    - assets/images/shorts_button.png
+    - assets/images/YoutubeLogo.png
+    -

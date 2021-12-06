@@ -13,14 +13,14 @@ class StateWithGetx extends StatelessWidget {
   }
 
   final TextEditingController _textController = TextEditingController();
-  final BaseAPICommunicator baseAPICommunicator = Get.find();
+  final BaseAPICommunication baseAPICommunication = Get.find();
 
   search() {
 
     String inputText;
     if ((inputText = _textController.text) == '') return;
 
-    baseAPICommunicator.search(inputText);
+    baseAPICommunication.search(inputText);
 
     _textController.text = '';
     //myController.list.value(inputText);
@@ -33,7 +33,7 @@ class StateWithGetx extends StatelessWidget {
         children: [
           Flexible(
             child: Obx(() {
-              return CustomListView(baseAPICommunicator.list.value);
+              return CustomListView(baseAPICommunication.list.value);
             }),
             flex: 5,
           ),
@@ -123,7 +123,7 @@ class CustomListView extends StatelessWidget {
           if (index == (_list.length - 1))
             Timer(
               Duration(milliseconds: 10),
-              () => _controller.jumpTo(_controller.position.maxScrollExtent),
+                  () => _controller.jumpTo(_controller.position.maxScrollExtent),
             );
 
           return Card(
